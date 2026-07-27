@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1B4B3A;
+  --color-accent: #C9A227;
+  --color-surface: #EEF2EF;
+  --color-cream: #FAFAF8;
+  --font-arabic: "Tajawal", sans-serif;
+}
