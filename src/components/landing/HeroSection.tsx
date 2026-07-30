@@ -1,0 +1,121 @@
+import { ArrowLeft, Check, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
+import heroImage from '../../assets/hero.webp'
+import { Container } from '../common/Container'
+import { Section } from '../common/Section'
+import { Button } from '../ui/Button'
+
+const benefits = [
+  'توفير الوقت',
+  'مدعوم بالذكاء الاصطناعي',
+  'سهل الاستخدام',
+]
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0 },
+}
+
+const scrollToSection = (selector) => {
+  document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' })
+}
+
+export function HeroSection() {
+  return (
+    <Section
+      id="home"
+      aria-labelledby="hero-title"
+      className="relative isolate overflow-hidden bg-[#FAFBFC] pb-10 pt-8 font-['Cairo'] sm:pb-12 sm:pt-10 lg:flex lg:items-center lg:pb-16 lg:pt-12"
+    >
+      <Container className="relative">
+        <div dir="ltr" className="grid grid-cols-1 items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
+          <div dir="rtl" className="order-1 text-right">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-[#065F46]"
+            >
+              <Sparkles className="size-4 text-[#C89B3C]" aria-hidden="true" />
+              <span>منصة تعليمية مدعومة بالذكاء الاصطناعي</span>
+            </motion.div>
+
+            <motion.h1
+              id="hero-title"
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+              className="mt-3 max-w-[650px] text-[clamp(2.35rem,5vw,4.25rem)] font-extrabold leading-[1.15] tracking-[-0.035em] text-[#0F172A] sm:mt-4"
+            >
+              شريكك <span className="text-[#065F46]">الذكي</span>
+              <br />
+              لتعليم
+              <br />
+              اللغة العربية
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.24, ease: 'easeOut' }}
+              className="mt-5 max-w-[34rem] text-base leading-8 text-slate-700 sm:mt-6 sm:text-lg sm:leading-9"
+            >
+              يساعد Mo3allimAI معلمي اللغة العربية على إعداد الدروس والاختبارات والموارد التعليمية بسرعة واحترافية باستخدام الذكاء الاصطناعي.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.45, delay: 0.34, ease: 'easeOut' }}
+              className="mt-6 flex flex-wrap justify-start gap-3"
+            >
+              <Button
+                className="h-14 rounded-xl bg-[#065F46] px-9 text-base shadow-lg shadow-emerald-950/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#064E3B] hover:shadow-xl"
+                onClick={() => scrollToSection('#how-it-works')}
+              >
+                ابدأ مجانًا
+                <ArrowLeft className="size-4" aria-hidden="true" />
+              </Button>
+              <Button variant="secondary" className="h-14 rounded-xl border-emerald-200 bg-white px-7 text-base text-emerald-800 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-700 hover:bg-emerald-50" onClick={() => scrollToSection('#how-it-works')}>
+                شاهد كيف تعمل المنصة
+              </Button>
+            </motion.div>
+
+            <motion.ul
+              initial="hidden"
+              animate="visible"
+              variants={{ hidden: {}, visible: { transition: { delayChildren: 0.46, staggerChildren: 0.08 } } }}
+              className="mt-6 flex flex-wrap justify-start gap-x-5 gap-y-2 text-base font-medium text-slate-600"
+            >
+              {benefits.map((benefit) => (
+                <motion.li key={benefit} variants={fadeUp} className="flex items-center gap-1.5">
+                  <Check className="size-4 stroke-[2.5] text-[#10B981]" aria-hidden="true" />
+                  {benefit}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+
+          <motion.div
+            dir="rtl"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.18, ease: 'easeOut' }}
+            className="relative order-2 flex min-h-56 items-center justify-center sm:min-h-72 md:min-h-80 lg:min-h-[26rem]"
+          >
+            <div className="absolute inset-[8%] -z-10 rounded-full bg-emerald-300/15 blur-3xl" aria-hidden="true" />
+            <motion.img
+              src={heroImage}
+              alt="واجهة منصة Mo3allimAI للتعليم العربي"
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+              className="h-auto w-full max-w-[38rem] rounded-[24px] object-contain shadow-[0_16px_36px_rgba(15,23,42,0.06)] mix-blend-multiply lg:max-w-[42rem]"
+            />
+          </motion.div>
+        </div>
+      </Container>
+    </Section>
+  )
+}

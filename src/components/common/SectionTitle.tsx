@@ -1,0 +1,2 @@
+interface SectionTitleProps { eyebrow: string; title: string; description?: string; centered?: boolean }
+export function SectionTitle({ eyebrow, title, description, centered = true }: SectionTitleProps) { return <div className={centered ? 'mx-auto max-w-2xl text-center' : 'max-w-xl'}><p className="mb-3 text-sm font-bold tracking-wide text-emerald-700">{eyebrow}</p><h2 className="text-[clamp(1.75rem,5vw,2.25rem)] font-extrabold tracking-tight text-slate-900">{title}</h2>{description && <p className="mt-4 text-base leading-7 text-slate-600 sm:mt-5">{description}</p>}</div> }

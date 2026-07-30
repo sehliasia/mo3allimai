@@ -1,9 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #1B4B3A;
-  --color-accent: #C9A227;
-  --color-surface: #EEF2EF;
-  --color-cream: #FAFAF8;
-  --font-arabic: "Tajawal", sans-serif;
+@theme { --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif; }
+
+@layer base {
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body { @apply m-0 min-w-0 overflow-x-clip bg-white font-sans antialiased; }
+  * { @apply border-slate-200; }
+  *, ::before, ::after { min-width: 0; }
+  img, svg, video, canvas { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
