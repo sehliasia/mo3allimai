@@ -1,45 +1,15 @@
-import { useState } from 'react'
 import { Loader2, Mail, UserRound } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { AuthButton } from '../components/auth/AuthButton'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { FormInput } from '../components/auth/FormInput'
 import { PasswordInput } from '../components/auth/PasswordInput'
+import { register } from '../services/authService'
 import { isValidEmail } from '../utils/validation'
 
-type RegisterErrors = Partial<Record<'name' | 'email' | 'password' | 'confirmPassword' | 'terms', string>>
 export function RegisterPage() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [acceptedTerms, setAcceptedTerms] = useState(false)
-  const [errors, setErrors] = useState<RegisterErrors>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const nextErrors: RegisterErrors = {}
-    if (!name.trim()) nextErrors.name = 'الاسم الكامل مطلوب.'
-    if (!isValidEmail(email)) nextErrors.email = 'يرجى إدخال بريد إلكتروني صالح.'
-    if (password.length < 6) nextErrors.password = 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.'
-    if (password !== confirmPassword) nextErrors.confirmPassword = 'تأكيد كلمة المرور غير مطابق.'
-    if (!acceptedTerms) nextErrors.terms = 'يرجى الموافقة على الشروط وسياسة الخصوصية.'
-    setErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) return
-    setIsSubmitting(true)
-    window.setTimeout(() => setIsSubmitting(false), 450)
-  }
-
-  return <AuthLayout title="إنشاء حساب" description="أنشئ حسابك وابدأ استخدام Mo3allimAI.">
-    <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-4">
-      <FormInput id="register-name" label="الاسم الكامل" value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" placeholder="أدخل اسمك الكامل" error={errors.name} icon={<UserRound className="size-4" />} disabled={isSubmitting} />
-      <FormInput id="register-email" label="البريد الإلكتروني" type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="example@email.com" error={errors.email} icon={<Mail className="size-4" />} disabled={isSubmitting} />
-      <PasswordInput id="register-password" label="كلمة المرور" value={password} onChange={setPassword} autoComplete="new-password" error={errors.password} disabled={isSubmitting} />
-      <PasswordInput id="register-confirm-password" label="تأكيد كلمة المرور" value={confirmPassword} onChange={setConfirmPassword} autoComplete="new-password" error={errors.confirmPassword} disabled={isSubmitting} />
-      <div><label className="flex cursor-pointer items-start gap-2 text-sm leading-6 text-slate-600"><input type="checkbox" checked={acceptedTerms} disabled={isSubmitting} onChange={(event) => setAcceptedTerms(event.target.checked)} className="mt-1 size-4 rounded border-slate-300 text-emerald-700 focus:ring-emerald-600 disabled:cursor-not-allowed" />أوافق على الشروط وسياسة الخصوصية</label>{errors.terms && <p className="mt-1.5 text-xs font-medium text-rose-600">{errors.terms}</p>}</div>
-      <AuthButton type="submit" disabled={isSubmitting}>{isSubmitting ? <><Loader2 className="size-5 animate-spin" aria-hidden="true" />جارٍ إنشاء الحساب...</> : 'إنشاء الحساب'}</AuthButton>
-    </form>
-    <p className="mt-7 text-center text-sm text-slate-600">لديك حساب بالفعل؟ <Link to="/login" className="font-bold text-emerald-700 transition-colors duration-200 hover:text-emerald-800 hover:underline focus:outline-none focus:ring-2 focus:ring-emerald-600">تسجيل الدخول</Link></p>
-  </AuthLayout>
+  const [name, setName] = useState(''); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [confirm, setConfirm] = useState(''); const [accepted, setAccepted] = useState(false); const [message, setMessage] = useState(''); const [loading, setLoading] = useState(false); const navigate = useNavigate()
+  async function submit(event: React.FormEvent<HTMLFormElement>) { event.preventDefault(); if (!name.trim() || !isValidEmail(email) || password.length < 6 || password !== confirm || !accepted) { setMessage('يرجى التحقق من البيانات المدخلة'); return }; setLoading(true); try { await register({ full_name: name, email, password }); navigate('/login', { state: { success: 'تم إنشاء الحساب بنجاح' } }) } catch (error) { setMessage(error instanceof Error ? error.message : 'تعذر الاتصال بالخادم') } finally { setLoading(false) } }
+  return <AuthLayout title="إنشاء حساب" description="أنشئ حسابك وابدأ استخدام Mo3allimAI."><form onSubmit={submit} noValidate className="mt-8 space-y-4">{message && <p role="alert" className="rounded-lg bg-rose-50 p-3 text-sm text-rose-700">{message}</p>}<FormInput id="register-name" label="الاسم الكامل" value={name} onChange={(event) => setName(event.target.value)} icon={<UserRound className="size-4" />} disabled={loading} /><FormInput id="register-email" label="البريد الإلكتروني" type="email" value={email} onChange={(event) => setEmail(event.target.value)} icon={<Mail className="size-4" />} disabled={loading} /><PasswordInput id="register-password" label="كلمة المرور" value={password} onChange={setPassword} disabled={loading} /><PasswordInput id="register-confirm" label="تأكيد كلمة المرور" value={confirm} onChange={setConfirm} disabled={loading} /><label className="flex gap-2 text-sm text-slate-600"><input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)} />أوافق على الشروط وسياسة الخصوصية</label><AuthButton type="submit" disabled={loading}>{loading ? <><Loader2 className="size-5 animate-spin" />جارٍ إنشاء الحساب...</> : 'إنشاء الحساب'}</AuthButton></form><p className="mt-7 text-center text-sm text-slate-600">لديك حساب بالفعل؟ <Link to="/login" className="font-bold text-emerald-700 hover:underline">تسجيل الدخول</Link></p></AuthLayout>
 }
