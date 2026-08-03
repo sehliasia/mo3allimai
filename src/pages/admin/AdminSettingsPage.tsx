@@ -1,0 +1,2 @@
+import { useAuth } from '../../contexts/AuthContext'
+export function AdminSettingsPage() { const { user } = useAuth(); return <><h2 className="text-3xl font-extrabold">إعدادات الحساب</h2><section className="mt-7 max-w-xl rounded-2xl border bg-white p-6"><p>{user?.full_name}</p><p className="mt-2 text-slate-600">{user?.email}</p><p className="mt-4 text-emerald-700">مدير · مفعل</p><p className="mt-8 rounded-lg bg-slate-50 p-3 text-slate-600">قيد التطوير</p></section></> }

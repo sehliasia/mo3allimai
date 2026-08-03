@@ -11,7 +11,7 @@ class AuthService:
         return self.users.create(full_name=cleaned_name, email=normalized_email, password_hash=hash_password(password), role=UserRole.teacher)
     def authenticate(self, email: str, password: str) -> User:
         user = self.users.get_by_email(email.strip().lower())
-        if not user or not verify_password(password, user.password_hash): raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password", headers={"WWW-Authenticate": "Bearer"})
+        if not user or user.is_deleted or not verify_password(password, user.password_hash): raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password", headers={"WWW-Authenticate": "Bearer"})
         if not user.is_active: raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is inactive")
         return user
     def login(self, email: str, password: str) -> tuple[str, User]:

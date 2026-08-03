@@ -1,0 +1,7 @@
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+export function DashboardPage({ role }: { role: 'teacher' | 'admin' }) {
+  const { user, logout } = useAuth(); const navigate = useNavigate(); const isAdmin = role === 'admin'
+  function handleLogout() { logout(); navigate('/login', { replace: true }) }
+  return <main dir="rtl" className="grid min-h-screen place-items-center bg-slate-50 p-4 font-['Cairo']"><section className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 text-right shadow-sm sm:p-8"><h1 className="text-2xl font-extrabold text-slate-900">{isAdmin ? 'لوحة تحكم الإدارة' : 'لوحة تحكم الأستاذ'}</h1><p className="mt-6 text-lg font-bold text-slate-800">مرحباً {user?.full_name}</p><dl className="mt-5 space-y-3 text-sm text-slate-600"><div><dt className="font-semibold text-slate-800">البريد الإلكتروني</dt><dd>{user?.email}</dd></div><div><dt className="font-semibold text-slate-800">الدور</dt><dd>{isAdmin ? 'مدير' : 'أستاذ'}</dd></div><div><dt className="font-semibold text-slate-800">حالة الحساب</dt><dd className="text-emerald-700">{user?.is_active ? 'مفعل' : 'غير مفعل'}</dd></div></dl><button onClick={handleLogout} className="mt-8 h-12 w-full rounded-xl bg-[#065F46] font-bold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">تسجيل الخروج</button></section></main>
+}
