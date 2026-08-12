@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.models.chat import ChatRequest, ChatResponse
-from app.services.openai_service import OpenAIService
+from app.services.rag_services import RAGService
 
 
 router = APIRouter(
@@ -10,13 +10,18 @@ router = APIRouter(
 )
 
 
+# Chargement UNE SEULE FOIS
+rag_service = RAGService()
+
+
 @router.post("/", response_model=ChatResponse)
 def chat(request: ChatRequest):
 
-    reply = OpenAIService.generate_response(
+    result = rag_service.generate_response(
         request.message
     )
 
     return ChatResponse(
-        response=reply
+        response=result["response"],
+        sources=result["sources"]
     )
