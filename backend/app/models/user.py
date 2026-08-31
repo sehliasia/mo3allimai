@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from sqlalchemy import Boolean, DateTime, Enum as SqlEnum, ForeignKey, Integer, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
 
 class UserRole(str, Enum):
@@ -21,3 +21,6 @@ class User(Base):
     deleted_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    assistant_conversations: Mapped[list["AssistantConversation"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan", passive_deletes=True,
+    )

@@ -5,7 +5,7 @@ from sqlalchemy import engine_from_config, pool
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.core.config import get_settings
 from app.database.base import Base
-from app.models import User
+from app.models import KnowledgeDocument, User
 config = context.config
 config.set_main_option("sqlalchemy.url", get_settings().database_url)
 target_metadata = Base.metadata

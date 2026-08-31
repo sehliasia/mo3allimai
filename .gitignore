@@ -18,6 +18,7 @@ dist-ssr
 backend/.env
 .venv/
 backend/.venv/
+backend/debug/chunks/
 __pycache__/
 *.pyc
 
@@ -31,3 +32,14 @@ __pycache__/
 *.njsproj
 *.sln
 *.sw?
+
+# Generated runtime data
+.pytest_cache/
+backend/.pytest_cache/
+cache/
+backend/cache/
+uploads/
+backend/uploads/
+reports/
+backend/reports/
+debug/

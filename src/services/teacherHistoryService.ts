@@ -1,0 +1,4 @@
+import { getStoredToken, AuthApiError } from './authService'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api'
+export type TeacherActivity = { id: number; activity_type: string; resource_type: string | null; resource_id: number | null; title: string; metadata: { cefr_level?: string; theme?: string; filename?: string } | null; created_at: string }
+export async function getTeacherHistory() { const token = getStoredToken(); if (!token) throw new AuthApiError('Authentication is required', 401); const response = await fetch(`${API_URL}/teacher/history`, { headers: { Authorization: `Bearer ${token}` } }); if (!response.ok) throw new Error('Request failed'); const body = await response.json() as { items?: TeacherActivity[] }; return Array.isArray(body.items) ? body.items : [] }

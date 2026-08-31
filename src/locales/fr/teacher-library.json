@@ -1,0 +1,16 @@
+{
+  "importDocument": "Importer un document",
+  "all": "Tout",
+  "myDocuments": "Mes documents",
+  "myCreations": "Mes créations",
+  "searchPlaceholder": "Rechercher une ressource…",
+  "emptyTitle": "Votre bibliothèque est vide",
+  "emptyDescription": "Les contenus que vous sauvegarderez apparaîtront ici.",
+  "dropDocument": "Glissez votre fichier ici ou parcourez les fichiers",
+  "deleteConfirm": "Supprimer cette ressource ?",
+  "delete": "Supprimer",
+  "chatDocuments": "Documents",
+  "uploadFailed": "Échec de l’import du document.",
+  "removeAttachment": "Retirer {{filename}}",
+  "status": { "uploading": "Import en cours…", "uploaded": "Document reçu", "processing": "Traitement…", "extracting": "Extraction du texte…", "chunking": "Découpage du document…", "embedding": "Génération des embeddings…", "indexing": "Indexation…", "completed": "Document prêt", "failed": "Échec de l’indexation", "indexed": "Document prêt", "error": "Échec de l’indexation" }
+}

@@ -1,37 +1,37 @@
-import { Bot, History, LayoutDashboard, Library, Menu, Settings, WandSparkles } from 'lucide-react'
-import { useState } from 'react'
+import { Bot, ChevronDown, ChevronLeft, ChevronRight, History, LayoutDashboard, Library, LogOut, Menu, Moon, Settings, Sun, UserRound, WandSparkles, X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import logo1 from '../assets/logo1.png'
 import { LanguageSwitcher } from '../components/common/LanguageSwitcher'
 import { useAuth } from '../contexts/AuthContext'
+import { useTeacherTheme } from '../hooks/useTeacherTheme'
 
 const links = [
-  ['/teacher/dashboard', 'sidebar.dashboard', LayoutDashboard],
-  ['/teacher/assistant', 'sidebar.assistant', Bot],
-  ['/teacher/tools', 'sidebar.aiTools', WandSparkles],
-  ['/teacher/library', 'sidebar.library', Library],
-  ['/teacher/history', 'sidebar.history', History],
-  ['/teacher/settings', 'sidebar.settings', Settings],
+  ['/teacher/dashboard', 'sidebar.dashboard', LayoutDashboard], ['/teacher/assistant', 'sidebar.assistant', Bot],
+  ['/teacher/tools', 'sidebar.aiTools', WandSparkles], ['/teacher/library', 'sidebar.library', Library], ['/teacher/history', 'sidebar.history', History],
 ] as const
 
 export function TeacherLayout() {
-  const { user, logout } = useAuth()
-  const { t, i18n } = useTranslation('teacher')
-  const navigate = useNavigate()
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const isRTL = i18n.resolvedLanguage === 'ar'
-  const sidebarSide = isRTL ? 'right-0 border-l' : 'left-0 border-r'
-  const contentOffset = isRTL ? 'lg:mr-[280px]' : 'lg:ml-[280px]'
-  const signOut = () => { logout(); navigate('/login') }
-
-  const sidebar = (
-    <div className="flex h-full w-[280px] flex-col bg-white">
-      <div dir="ltr" className="flex items-center gap-3 border-b p-5"><img src={logo1} alt="Mo3allimAI" className="size-10 object-contain" /><div><b className="text-[#065F46]">Mo3allim<span className="text-[#C89B3C]">AI</span></b><p className="text-xs text-slate-500">{t('brand.space')}</p></div></div>
-      <nav className="flex-1 space-y-2 p-4">{links.map(([to, labelKey, Icon]) => <NavLink key={to} to={to} onClick={() => setDrawerOpen(false)} className={({ isActive }) => `flex items-center gap-3 rounded-xl px-4 py-3 text-start ${isActive ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:bg-slate-100'}`}><Icon className="size-5" />{t(labelKey)}</NavLink>)}</nav>
-      <button type="button" onClick={signOut} className="border-t p-4 text-start text-slate-700">{user?.full_name} · {t('auth.logout')}</button>
+  const { user, logout } = useAuth(); const { t, i18n } = useTranslation(['teacher', 'teacherProfile']); const navigate = useNavigate(); const location = useLocation()
+  const [drawerOpen, setDrawerOpen] = useState(false); const [profileOpen, setProfileOpen] = useState(false); const profileRef = useRef<HTMLDivElement>(null)
+  const { isDark, toggleDark } = useTeacherTheme(); const isRTL = i18n.resolvedLanguage === 'ar'; const side = isRTL ? 'right-0 border-l' : 'left-0 border-r'; const offset = isRTL ? 'lg:mr-64' : 'lg:ml-64'; const Arrow = isRTL ? ChevronLeft : ChevronRight
+  const initials = user?.full_name?.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase() || 'M'
+  const closeMenu = () => setProfileOpen(false); const goTo = (path: string) => { closeMenu(); setDrawerOpen(false); navigate(path) }; const signOut = () => { closeMenu(); setDrawerOpen(false); logout(); navigate('/login') }
+  useEffect(() => { setProfileOpen(false) }, [location.pathname])
+  useEffect(() => { const outside = (event: MouseEvent) => { if (!profileRef.current?.contains(event.target as Node)) closeMenu() }; const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') closeMenu() }; document.addEventListener('mousedown', outside); document.addEventListener('keydown', escape); return () => { document.removeEventListener('mousedown', outside); document.removeEventListener('keydown', escape) } }, [])
+  const sidebar = <div className="teacher-sidebar flex h-full w-64 flex-col bg-white">
+    <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-5" dir="ltr"><img src={logo1} alt="Mo3allimAI" className="size-9 shrink-0 object-contain" /><p className="text-lg font-extrabold tracking-tight text-[#065F46]">Mo3allim<span className="text-[#C89B3C]">AI</span></p></div>
+    <nav aria-label={t('sidebar.navigation')} className="flex-1 space-y-1 px-3 py-5">{links.map(([to, labelKey, Icon]) => <NavLink key={to} to={to} onClick={() => setDrawerOpen(false)} className={({ isActive }) => `flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700 ${isActive ? 'teacher-nav-active bg-emerald-50 text-[#065F46]' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}><Icon className="size-[18px] shrink-0" />{t(labelKey)}</NavLink>)}</nav>
+    <div ref={profileRef} className="relative border-t border-slate-100 p-3">
+      {profileOpen && <div role="menu" aria-label={t('teacherProfile:accountMenu')} className="absolute bottom-[calc(100%+10px)] start-3 end-3 z-50 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-950/10">
+        <div className="flex items-center gap-3 px-3 py-3"><span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-sm font-bold text-[#065F46]">{initials}</span><span className="min-w-0"><span className="block truncate text-sm font-semibold text-slate-900">{user?.full_name || t('teacherProfile:teacher')}</span><span dir="ltr" className="block truncate text-xs text-slate-500">{user?.email}</span><span className="mt-0.5 block text-xs font-medium text-emerald-700">{t('teacherProfile:teacher')}</span></span></div><div className="my-1 border-t border-slate-100" />
+        <button type="button" role="menuitem" onClick={() => goTo('/teacher/profile')} className="teacher-account-row"><UserRound className="size-4" /><span className="flex-1">{t('teacherProfile:menuProfile')}</span><Arrow className="size-4 text-slate-400" /></button><button type="button" role="menuitem" onClick={() => goTo('/teacher/settings')} className="teacher-account-row"><Settings className="size-4" /><span className="flex-1">{t('teacherProfile:menuSettings')}</span><Arrow className="size-4 text-slate-400" /></button><div className="my-1 border-t border-slate-100" />
+        <div className="teacher-account-row cursor-default"><span className="flex size-4 items-center justify-center">{isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}</span><span className="flex-1">{t('teacherProfile:darkMode')}</span><button type="button" role="switch" aria-checked={isDark} aria-label={t('teacherProfile:darkMode')} onClick={toggleDark} className={`h-6 w-11 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 ${isDark ? 'bg-emerald-600' : 'bg-slate-300 hover:bg-slate-400'}`} /></div><div className="my-1 border-t border-slate-100" />
+        <button type="button" role="menuitem" onClick={signOut} className="teacher-account-row text-rose-600 hover:bg-rose-50 focus-visible:ring-rose-500"><LogOut className="size-4" /><span className="flex-1">{t('auth.logout')}</span></button>
+      </div>}
+      <button type="button" onClick={() => setProfileOpen(open => !open)} aria-haspopup="menu" aria-expanded={profileOpen} aria-label={t('teacherProfile:accountMenu')} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-start transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700 ${profileOpen ? 'bg-slate-100' : 'hover:bg-slate-50'}`}><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-xs font-bold text-[#065F46]">{initials}</span><span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold text-slate-800">{user?.full_name || t('teacherProfile:teacher')}</span><span dir="ltr" className="block truncate text-xs text-slate-500">{user?.email}</span></span><ChevronDown className={`size-4 shrink-0 text-slate-400 transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`} /></button>
     </div>
-  )
-
-  return <div className="min-h-screen bg-slate-50"><aside className={`fixed inset-y-0 z-40 hidden w-[280px] border-slate-200 bg-white lg:block ${sidebarSide}`}>{sidebar}</aside>{drawerOpen && <><button type="button" onClick={() => setDrawerOpen(false)} aria-label={t('menu.open')} className="fixed inset-0 z-40 bg-slate-950/40 lg:hidden" /><aside className={`fixed inset-y-0 z-50 lg:hidden ${sidebarSide}`}>{sidebar}</aside></>}<div className={contentOffset}><header className="flex items-center justify-between gap-4 border-b bg-white p-4"><button type="button" onClick={() => setDrawerOpen(true)} className="lg:hidden" aria-label={t('menu.open')}><Menu /></button><LanguageSwitcher /></header><main className="mx-auto max-w-7xl p-5"><Outlet /></main></div></div>
+  </div>
+  return <div id="teacher-workspace" dir={isRTL ? 'rtl' : 'ltr'} className={`min-h-screen bg-[#F8FAFC] ${isRTL ? 'teacher-rtl' : 'teacher-ltr'} ${isDark ? 'teacher-dark' : ''}`}><aside className={`teacher-sidebar-shell fixed inset-y-0 z-40 hidden w-64 border-slate-200 lg:block ${side}`}>{sidebar}</aside>{drawerOpen && <><button type="button" onClick={() => setDrawerOpen(false)} aria-label={t('menu.close')} className="fixed inset-0 z-40 bg-slate-950/35 lg:hidden" /><aside className={`fixed inset-y-0 z-50 shadow-2xl lg:hidden ${side}`}>{sidebar}</aside></>}<div className={`min-h-screen ${offset}`}><header className="teacher-topbar sticky top-0 z-30 flex h-14 items-center gap-4 bg-white/90 px-4 backdrop-blur sm:px-6"><button type="button" onClick={() => setDrawerOpen(true)} className="flex size-10 items-center justify-center rounded-xl text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700 lg:hidden" aria-label={t('menu.open')}><Menu className="size-5" /></button><div className="ms-auto flex items-center gap-2"><LanguageSwitcher />{drawerOpen && <button type="button" onClick={() => setDrawerOpen(false)} className="lg:hidden" aria-label={t('menu.close')}><X className="size-5" /></button>}</div></header><main className="mx-auto w-full max-w-7xl px-4 pb-6 pt-5 sm:px-6 sm:pb-8 sm:pt-6 lg:px-8 lg:pb-8 lg:pt-6"><Outlet /></main></div></div>
 }

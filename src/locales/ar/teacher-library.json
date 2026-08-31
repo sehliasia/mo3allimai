@@ -1,0 +1,16 @@
+{
+  "importDocument": "استيراد مستند",
+  "all": "الكل",
+  "myDocuments": "مستنداتي",
+  "myCreations": "محتوياتي",
+  "searchPlaceholder": "البحث في الموارد...",
+  "emptyTitle": "مكتبتك فارغة",
+  "emptyDescription": "سيظهر هنا المحتوى الذي تحفظه.",
+  "dropDocument": "اسحب ملفك هنا أو تصفح الملفات",
+  "deleteConfirm": "هل تريد حذف هذا المورد؟",
+  "delete": "حذف",
+  "chatDocuments": "المستندات",
+  "uploadFailed": "تعذر استيراد المستند.",
+  "removeAttachment": "إزالة {{filename}}",
+  "status": { "uploading": "جارٍ الرفع…", "uploaded": "تم استلام المستند", "processing": "جارٍ المعالجة…", "extracting": "جارٍ استخراج النص…", "chunking": "جارٍ تقسيم المستند…", "embedding": "جارٍ إنشاء التمثيلات…", "indexing": "جارٍ الفهرسة…", "completed": "المستند جاهز", "failed": "فشلت الفهرسة", "indexed": "المستند جاهز", "error": "فشلت الفهرسة" }
+}

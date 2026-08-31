@@ -1,0 +1,16 @@
+{
+  "importDocument": "Import a document",
+  "all": "All",
+  "myDocuments": "My documents",
+  "myCreations": "My creations",
+  "searchPlaceholder": "Search resources…",
+  "emptyTitle": "Your library is empty",
+  "emptyDescription": "Content you save will appear here.",
+  "dropDocument": "Drop your file here or browse files",
+  "deleteConfirm": "Delete this resource?",
+  "delete": "Delete",
+  "chatDocuments": "Documents",
+  "uploadFailed": "Document upload failed.",
+  "removeAttachment": "Remove {{filename}}",
+  "status": { "uploading": "Uploading…", "uploaded": "Document received", "processing": "Processing…", "extracting": "Extracting text…", "chunking": "Chunking document…", "embedding": "Generating embeddings…", "indexing": "Indexing…", "completed": "Document ready", "failed": "Indexing failed", "indexed": "Document ready", "error": "Indexing failed" }
+}

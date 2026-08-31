@@ -17,3 +17,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 def require_admin(user: User = Depends(get_current_user)) -> User:
     if user.role != UserRole.admin: raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
     return user
+
+def require_teacher(user: User = Depends(get_current_user)) -> User:
+    if user.role != UserRole.teacher: raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Teacher access required")
+    return user

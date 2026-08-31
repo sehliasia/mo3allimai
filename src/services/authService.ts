@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api'
+export const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api'
 export type AuthUser = { id: number; full_name: string; email: string; role: 'teacher' | 'admin'; is_active: boolean }
 type ApiError = { detail?: string }
 export class AuthApiError extends Error {

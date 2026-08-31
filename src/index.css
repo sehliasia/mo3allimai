@@ -11,6 +11,88 @@
   img, svg, video, canvas { max-width: 100%; }
 }
 
+/* Scoped so Admin and public/auth pages keep their current appearance. */
+#teacher-workspace.teacher-dark {
+  --teacher-bg: #111827;
+  --teacher-sidebar: #162033;
+  --teacher-surface: #1e293b;
+  --teacher-elevated: #26354a;
+  --teacher-border: rgb(148 163 184 / .18);
+  --teacher-text: #e8eef7;
+  --teacher-muted: #a8b6ca;
+  --teacher-subtle: #7f90a8;
+  color: var(--teacher-text);
+  background: var(--teacher-bg);
+}
+#teacher-workspace.teacher-dark .teacher-sidebar { background-color: var(--teacher-sidebar); }
+#teacher-workspace.teacher-dark .teacher-topbar { background-color: rgb(17 24 39 / .94); border-color: var(--teacher-border); }
+#teacher-workspace.teacher-dark .bg-white { background-color: var(--teacher-surface); }
+#teacher-workspace.teacher-dark .bg-\[\#F8FAFC\], #teacher-workspace.teacher-dark .bg-slate-50 { background-color: var(--teacher-bg); }
+#teacher-workspace.teacher-dark .bg-slate-100 { background-color: var(--teacher-elevated); }
+#teacher-workspace.teacher-dark .bg-slate-50\/60 { background-color: rgb(30 41 59 / .72); }
+#teacher-workspace.teacher-dark .bg-emerald-50 { background-color: rgb(16 185 129 / .14); }
+#teacher-workspace.teacher-dark .border-slate-100, #teacher-workspace.teacher-dark .border-slate-200, #teacher-workspace.teacher-dark .border-slate-200\/80, #teacher-workspace.teacher-dark .border-dashed { border-color: var(--teacher-border); }
+#teacher-workspace.teacher-dark .text-slate-950, #teacher-workspace.teacher-dark .text-slate-900, #teacher-workspace.teacher-dark .text-slate-800, #teacher-workspace.teacher-dark .text-slate-700 { color: var(--teacher-text); }
+#teacher-workspace.teacher-dark .text-slate-600, #teacher-workspace.teacher-dark .text-slate-500 { color: var(--teacher-muted); }
+#teacher-workspace.teacher-dark .text-slate-400 { color: var(--teacher-subtle); }
+#teacher-workspace.teacher-dark input, #teacher-workspace.teacher-dark textarea, #teacher-workspace.teacher-dark select { background-color: var(--teacher-sidebar); border-color: rgb(148 163 184 / .28); color: var(--teacher-text); }
+#teacher-workspace.teacher-dark input::placeholder, #teacher-workspace.teacher-dark textarea::placeholder { color: var(--teacher-subtle); }
+#teacher-workspace.teacher-dark .hover\:bg-slate-50:hover, #teacher-workspace.teacher-dark .hover\:bg-slate-100:hover { background-color: var(--teacher-elevated); }
+#teacher-workspace.teacher-dark .hover\:bg-emerald-50:hover { background-color: rgb(16 185 129 / .2); }
+#teacher-workspace.teacher-dark .bg-gradient-to-br { background-image: linear-gradient(to bottom right, rgb(6 95 70 / .3), var(--teacher-surface)); }
+#teacher-workspace.teacher-dark .teacher-sidebar .text-\[\#065F46\] { color: #6ee7b7; }
+#teacher-workspace.teacher-dark .teacher-nav-active { background-color: rgb(16 185 129 / .16); color: #6ee7b7; }
+#teacher-workspace.teacher-dark .teacher-tool-card { box-shadow: 0 12px 28px rgb(2 6 23 / .16); }
+#teacher-workspace.teacher-dark .teacher-tool-card:hover { background-color: var(--teacher-elevated); box-shadow: 0 16px 34px rgb(2 6 23 / .24); }
+#teacher-workspace.teacher-dark .teacher-tool-icon { background-color: rgb(16 185 129 / .16); color: #6ee7b7; }
+#teacher-workspace.teacher-dark .teacher-tool-badge { background-color: rgb(15 23 42 / .56); color: #b9c6d8; border-color: rgb(148 163 184 / .2); }
+#teacher-workspace.teacher-dark .teacher-tool-cta { color: #6ee7b7; }
+#teacher-workspace.teacher-dark .teacher-account-row { color: #cbd5e1; }
+
+.teacher-account-row { display: flex; min-height: 2.75rem; width: 100%; align-items: center; gap: .75rem; border-radius: .75rem; padding: .625rem .75rem; text-align: start; font-size: .875rem; font-weight: 500; color: #334155; transition: background-color 160ms ease, color 160ms ease; }
+.teacher-account-row:hover { background: #f8fafc; }
+.teacher-account-row:focus-visible { outline: none; box-shadow: 0 0 0 2px #047857; }
+
+/* Direction is owned by TeacherLayout, so Arabic gets a full RTL workspace
+   while public and Admin layouts keep their existing direction behavior. */
+#teacher-workspace.teacher-rtl .teacher-page-header,
+#teacher-workspace.teacher-rtl .teacher-hero-actions {
+  justify-content: flex-start;
+  text-align: start;
+}
+#teacher-workspace.teacher-rtl .teacher-page-heading,
+#teacher-workspace.teacher-rtl .teacher-page-header-action {
+  text-align: start;
+}
+
+@media (min-width: 1024px) and (hover: hover) {
+  #teacher-workspace .teacher-sidebar-shell {
+    box-shadow: 4px 0 14px rgb(15 23 42 / .035);
+    transition: background-color 240ms ease, box-shadow 240ms ease;
+  }
+  #teacher-workspace .teacher-sidebar-shell:hover {
+    box-shadow: 8px 0 22px rgb(15 23 42 / .09);
+  }
+  #teacher-workspace[dir="rtl"] .teacher-sidebar-shell {
+    box-shadow: -4px 0 14px rgb(15 23 42 / .035);
+  }
+  #teacher-workspace[dir="rtl"] .teacher-sidebar-shell:hover {
+    box-shadow: -8px 0 22px rgb(15 23 42 / .09);
+  }
+  #teacher-workspace.teacher-dark .teacher-sidebar-shell {
+    box-shadow: 4px 0 16px rgb(2 6 23 / .16);
+  }
+  #teacher-workspace.teacher-dark .teacher-sidebar-shell:hover {
+    box-shadow: 8px 0 24px rgb(6 95 70 / .16), 5px 0 18px rgb(2 6 23 / .2);
+  }
+  #teacher-workspace.teacher-dark[dir="rtl"] .teacher-sidebar-shell {
+    box-shadow: -4px 0 16px rgb(2 6 23 / .16);
+  }
+  #teacher-workspace.teacher-dark[dir="rtl"] .teacher-sidebar-shell:hover {
+    box-shadow: -8px 0 24px rgb(6 95 70 / .16), -5px 0 18px rgb(2 6 23 / .2);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

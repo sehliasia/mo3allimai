@@ -1,0 +1,16 @@
+{
+  "importDocument": "Importar un documento",
+  "all": "Todo",
+  "myDocuments": "Mis documentos",
+  "myCreations": "Mis creaciones",
+  "searchPlaceholder": "Buscar recursos…",
+  "emptyTitle": "Tu biblioteca está vacía",
+  "emptyDescription": "El contenido que guardes aparecerá aquí.",
+  "dropDocument": "Suelta tu archivo aquí o explora los archivos",
+  "deleteConfirm": "¿Eliminar este recurso?",
+  "delete": "Eliminar",
+  "chatDocuments": "Documentos",
+  "uploadFailed": "No se pudo importar el documento.",
+  "removeAttachment": "Quitar {{filename}}",
+  "status": { "uploading": "Importando…", "uploaded": "Documento recibido", "processing": "Procesando…", "extracting": "Extrayendo texto…", "chunking": "Dividiendo el documento…", "embedding": "Generando embeddings…", "indexing": "Indexando…", "completed": "Documento listo", "failed": "Error de indexación", "indexed": "Documento listo", "error": "Error de indexación" }
+}
