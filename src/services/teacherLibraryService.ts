@@ -24,7 +24,7 @@ export async function teacherRequest<T>(path: string, options: RequestInit = {},
   if (response.status === 401) throw new AuthApiError('Session expired', 401)
   if (!response.ok) {
     const body = await response.json().catch(() => null) as { detail?: unknown } | null
-    throw new TeacherLibraryApiError(typeof body?.detail === 'string' ? body.detail : fallbackError, response.status)
+    throw new TeacherLibraryApiError(formatFastApiError(body?.detail, fallbackError), response.status)
   }
   return response.status === 204 ? undefined as T : response.json() as Promise<T>
 }
@@ -32,6 +32,24 @@ export async function teacherRequest<T>(path: string, options: RequestInit = {},
 export async function getTeacherLibrary() { const response = await teacherRequest<{ items?: TeacherLibraryItem[] }>('/teacher/library'); return Array.isArray(response.items) ? response.items : [] }
 export async function uploadTeacherDocument(file: File) { const body = new FormData(); body.append('file', file); return teacherRequest<TeacherLibraryDocument>('/teacher/library/documents', { method: 'POST', body }) }
 export const deleteTeacherLibraryItem = (item: TeacherLibraryItem) => teacherRequest<void>(`/teacher/library/${item.kind === 'document' ? 'documents' : 'resources'}/${item.id}`, { method: 'DELETE' })
-export function saveTeacherResource(data: { resource_type: 'lesson-plan'; title: string; cefr_level: string; theme: string; content: Record<string, unknown> }) { return teacherRequest<TeacherSavedResource>('/teacher/library/resources', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }) }
-export function updateTeacherResource(id: number, data: { resource_type: 'lesson-plan'; title: string; cefr_level: string; theme: string; content: Record<string, unknown> }) { return teacherRequest<TeacherSavedResource>(`/teacher/library/resources/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }) }
+export type TeacherResourceType = 'lesson-plan' | 'activity' | 'course' | 'exercises'
+export function saveTeacherResource(data: { resource_type: TeacherResourceType; title: string; cefr_level: string; theme: string; content: Record<string, unknown> }) { return teacherRequest<TeacherSavedResource>('/teacher/library/resources', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }) }
+export function updateTeacherResource(id: number, data: { resource_type: TeacherResourceType; title: string; cefr_level: string; theme: string; content: Record<string, unknown> }) { return teacherRequest<TeacherSavedResource>(`/teacher/library/resources/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }) }
 export const getTeacherResource = (id: number) => teacherRequest<TeacherSavedResource>(`/teacher/library/resources/${id}`)
+
+/* FastAPI returns 422 `detail` as an array of { loc, msg, type }. Surface the
+   real field errors instead of the generic fallback message. */
+export function formatFastApiError(detail: unknown, fallback: string): string {
+  if (typeof detail === 'string') return detail
+  if (Array.isArray(detail) && detail.length) {
+    const lines = detail.flatMap((item) => {
+      if (!item || typeof item !== 'object') return []
+      const { loc, msg } = item as { loc?: unknown; msg?: unknown }
+      const field = Array.isArray(loc) ? loc.slice(1).join('.') : ''
+      const message = typeof msg === 'string' ? msg : 'valeur invalide'
+      return [field ? `${field} : ${message}` : message]
+    })
+    if (lines.length) return `Erreur de validation :\n- ${lines.join('\n- ')}`
+  }
+  return fallback
+}

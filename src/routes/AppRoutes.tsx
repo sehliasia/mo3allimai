@@ -16,6 +16,9 @@ import { TeacherLayout } from '../layouts/TeacherLayout'
 import { TeacherDashboardPage } from '../pages/teacher/TeacherDashboardPage'
 import { TeacherAssistantPage } from '../pages/teacher/TeacherAssistantPage'
 import { TeacherGeneratorPage } from '../pages/teacher/TeacherGeneratorPage'
+import { TeacherActivityPage } from '../pages/teacher/TeacherActivityPage'
+import { TeacherExercisesPage } from '../pages/teacher/TeacherExercisesPage'
+import { TeacherCoursePage } from '../pages/teacher/TeacherCoursePage'
 import { TeacherResourcePage } from '../pages/teacher/TeacherResourcePage'
 import { TeacherProfilePage } from '../pages/teacher/TeacherProfilePage'
 import { TeacherToolsPage } from '../pages/teacher/TeacherToolsPage'
@@ -25,7 +28,7 @@ export function AppRoutes() {
     <Route path="/" element={<LandingPage />} />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
-    <Route path="/teacher" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherLayout /></ProtectedRoute>}><Route index element={<Navigate to="dashboard" replace />} /><Route path="dashboard" element={<TeacherDashboardPage />} /><Route path="assistant" element={<TeacherAssistantPage />} /><Route path="tools" element={<TeacherToolsPage />} /><Route path="tools/:toolId" element={<TeacherGeneratorPage />} /><Route path="library" element={<TeacherResourcePage page="library" />} /><Route path="history" element={<TeacherResourcePage page="history" />} /><Route path="profile" element={<TeacherProfilePage />} /><Route path="settings" element={<TeacherResourcePage page="settings" />} /></Route>
+    <Route path="/teacher" element={<ProtectedRoute allowedRoles={['teacher']}><TeacherLayout /></ProtectedRoute>}><Route index element={<Navigate to="dashboard" replace />} /><Route path="dashboard" element={<TeacherDashboardPage />} /><Route path="assistant" element={<TeacherAssistantPage />} /><Route path="tools" element={<TeacherToolsPage />} /><Route path="tools/activity" element={<TeacherActivityPage />} /><Route path="tools/lesson" element={<TeacherCoursePage />} /><Route path="tools/exercises" element={<TeacherExercisesPage />} /><Route path="tools/:toolId" element={<TeacherGeneratorPage />} /><Route path="library" element={<TeacherResourcePage page="library" />} /><Route path="history" element={<TeacherResourcePage page="history" />} /><Route path="profile" element={<TeacherProfilePage />} /><Route path="settings" element={<TeacherResourcePage page="settings" />} /></Route>
     <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminLayout /></ProtectedRoute>}><Route index element={<Navigate to="dashboard" replace />} /><Route path="dashboard" element={<AdminDashboardPage />} /><Route path="teachers" element={<AdminTeachersPage />} /><Route path="knowledge-base" element={<KnowledgeBasePage />} /><Route path="knowledge-base/:documentId" element={<KnowledgeDocumentDetailsPage />} /><Route path="statistics" element={<AdminStatisticsPage />} /><Route path="settings" element={<AdminSettingsPage />} /><Route path="*" element={<Navigate to="dashboard" replace />} /></Route>
     <Route path="*" element={<LandingPage />} />
   </Routes>

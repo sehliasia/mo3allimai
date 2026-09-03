@@ -139,7 +139,7 @@ class OpenAICompatibleLLMProvider:
                 # its status and Retry-After header remain available to retries.
                 error_response = response if response is not None else getattr(exc, "response", None)
                 status_code = getattr(error_response, "status_code", None)
-                final_error = LLMProviderError("The configured LLM provider did not return a valid response.", status_code=status_code, provider_message=self._safe_provider_message(error_response), category=_exception_category(exc))
+                final_error = LLMProviderError("The configured LLM provider did not return a valid response.", status_code=status_code, provider_message=self._safe_provider_message(error_response), category=_exception_category(exc), response_metadata={"retry_after_seconds": self._retry_after_seconds(error_response)})
                 final_cause = exc
                 retryable = status_code in _TRANSIENT_STATUS_CODES or isinstance(exc, httpx.TransportError)
                 if not retryable or attempt >= max_retries:

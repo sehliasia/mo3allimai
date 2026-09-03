@@ -90,6 +90,40 @@ class Settings(BaseSettings):
     # keep this independent from answer-oriented RAG completions.
     structured_generation_max_output_tokens: int = 2000
     lesson_plan_max_output_tokens: int = 4096
+    activity_max_output_tokens: int = 3072
+    course_max_output_tokens: int = 4096
+    # openai/gpt-oss-20b on Groq caps max completion at 8192 tokens; its
+    # reasoning tokens also count toward the output budget, so a verbose
+    # A2 set (8 exercises + reading prompts + corrigés) can exceed 3072 and
+    # surface finish_reason=length ("génération tronquée"). Give headroom up
+    # to the documented model cap.
+    exercise_max_output_tokens: int = 8192
+    exercise_adapt_max_output_tokens: int = 2048
+    # KB exercise search (0-LLM) tuning: hybrid retrieval size, multi-chunk
+    # reconstruction budget and the deterministic detection threshold.
+    exercise_search_top_k: int = 12
+    exercise_search_block_max_chunks: int = 24
+    exercise_search_block_max_tokens: int = 4000
+    exercise_detection_threshold: float = 2.0
+    # LLM extraction stage (runs AFTER retrieval; retrieval stays 0 LLM).
+    # candidate_k: retrieved chunks before expansion; context_k: reduced
+    # candidate blocks actually sent to the extractor after ranking and
+    # neighbor-grouping; max_context_tokens bounds the extractor input.
+    exercise_extraction_candidate_k: int = 24
+    exercise_extraction_context_k: int = 12
+    exercise_extraction_max_context_tokens: int = 4000
+    exercise_extraction_max_output_tokens: int = 3000
+    exercise_extraction_required: bool = False
+    # Configurable ranking weights (must sum to 1.0).
+    exercise_ranking_weights: dict[str, float] = {
+        "retrieval": 0.40,
+        "structure": 0.20,
+        "theme": 0.12,
+        "level": 0.12,
+        "skill": 0.08,
+        "type": 0.03,
+        "source": 0.05,
+    }
     rag_llm_max_retries: int = 3
     rag_llm_retry_base_delay: float = 1.0
     rag_llm_retry_max_delay: float = 8.0
